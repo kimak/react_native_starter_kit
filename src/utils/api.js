@@ -3,7 +3,7 @@ const API = '';
 /* ***** *****  API call  ***** ******/
 
 export function apiCall(url, actionSuccess, actionFailure, method = 'GET', body = {}) { // eslint-disable-line
-  return dispatch => fetch( // eslint-disable-line
+  return dispatch => fetch(
     `${API}${url}`,
     {
       method,

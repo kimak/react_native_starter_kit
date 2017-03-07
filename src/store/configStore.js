@@ -6,7 +6,6 @@ import { persistStore, autoRehydrate, purgeStoredState } from 'redux-persist';
 import { PERSIST_ENABLED, PERSIST_PURGE } from '../utils/persist';
 
 import AppNavigator from '../routes';
-import indexReducer from './indexReducer';
 import home from '../components/home/homeReducer';
 
 const navReducer = (state, action) => {
@@ -71,14 +70,6 @@ export default function configureStore() {
 
   if (PERSIST_PURGE) {
     purgeStoredState({ storage: AsyncStorage });
-  }
-
-  if (module.hot) {
-    module.hot.accept(() => {
-      const nextRootReducer = indexReducer.default;
-
-      store.replaceReducer(nextRootReducer);
-    });
   }
 
   return store;
