@@ -14,7 +14,7 @@ const navReducer = (state, action) => {
 
   if (action.type === 'persist/REHYDRATE') {
     return {
-      rehydrated: true
+      rehydrated: true,
     };
   }
   return newState || state;
@@ -26,48 +26,46 @@ const middlewares = [thunk];
 if (process.env.NODE_ENV === 'development') {
   const logger = createLogger({
     duration: true,
-    timestamp: true
-    // diff: true,
-    // collapsed: (getState, action) => (
-    //   action.type === 'ACTION_TO_HIDE'
-    // )
+    timestamp: true,
   });
 
   middlewares.push(logger);
 }
 
 const enhancer = compose(
-  PERSIST_ENABLED ? autoRehydrate() : (f) => { return f; },
+  PERSIST_ENABLED ? autoRehydrate() : f => f,
   applyMiddleware(...middlewares),
-  window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__({}) :
-  (f) => { return f; },
+  window.__REDUX_DEVTOOLS_EXTENSION__ // eslint-disable-line
+    ? window.__REDUX_DEVTOOLS_EXTENSION__({}) // eslint-disable-line
+    : f => f,
 );
 
 const appReducer = combineReducers({
   nav: navReducer,
-  home
+  home,
 });
 
 const rootReducer = (state, action) => {
+  let newState = state;
+
   if (action.type === 'CLEAR_APP') {
-    state = undefined;
+    newState = undefined;
   }
 
-  return appReducer(state, action);
+  return appReducer(newState, action);
 };
 
 export default function configureStore() {
   const store = createStore(
     rootReducer,
     undefined,
-    enhancer
+    enhancer,
   );
 
   if (PERSIST_ENABLED) {
     persistStore(store, {
       storage: AsyncStorage,
-      debounce: 500
-      // whitelist: []
+      debounce: 500,
     });
   }
 
