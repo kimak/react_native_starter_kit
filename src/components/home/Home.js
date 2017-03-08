@@ -4,7 +4,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import Header from './items/Header';
+import Header from '../header/Header';
 import Button from '../shared/Button';
 
 import * as dummyActions from '../../actions/dummyActions';
@@ -49,8 +49,13 @@ function mapDispatchToProps(dispatch) {
 }
 
 Home.propTypes = {
-  actions: PropTypes.shape().isRequired,
-  navigation: PropTypes.shape().isRequired,
+  actions: PropTypes.shape({
+    firstActionCreator: PropTypes.func.isRequired,
+  }).isRequired,
+
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default connect(null, mapDispatchToProps)(Home);
